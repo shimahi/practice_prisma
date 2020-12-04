@@ -1,5 +1,6 @@
 import express from 'express'
 import { ApolloServer, gql } from 'apollo-server-express'
+import { prisma } from 'generated/prisma-client'
 
 const typeDefs = gql`
   type User {
@@ -13,21 +14,9 @@ const typeDefs = gql`
   }
 `
 
-const users = [
-  {
-    id: 1,
-    name: 'shimahi',
-  },
-  {
-    id: 2,
-    name: 'mochi',
-  },
-]
-
 const resolvers = {
   Query: {
-    users: () => users,
-    user: (_: unknown, { id }: { id: number }) => users.find((user) => user.id === id),
+    user: (_: unknown, { id }: { id: number }) => prisma.user({ id }),
   },
 }
 
